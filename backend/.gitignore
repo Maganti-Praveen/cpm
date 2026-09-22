@@ -12,5 +12,6 @@ seed*.js
 seed*.mjs
 seed*.ts
 prisma/seed*
+!prisma/seed.mjs
 prisma/clearDb.js
 prisma/updateImages.js
