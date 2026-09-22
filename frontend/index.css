@@ -1,0 +1,678 @@
+/* Establishes global typography setups and imports self-hosted fonts. */
+/* Implements Tailwind rules and custom scrollbar overrides. */
+
+
+/* Self-hosted fonts (latin only) — eliminates Google Fonts CDN roundtrip */
+@import "@fontsource/inter/latin-400.css";
+@import "@fontsource/inter/latin-500.css";
+@import "@fontsource/inter/latin-600.css";
+@import "@fontsource/inter/latin-700.css";
+
+@import "tailwindcss";
+
+/* Metric overrides for system fallback fonts to prevent CLS layout shifts during font swap */
+@font-face {
+  font-family: "Inter Fallback";
+  src: local("Arial");
+  size-adjust: 107%;
+  ascent-override: 90%;
+  descent-override: 22.5%;
+  line-gap-override: 0%;
+}
+
+@source "./index.html";
+@source "./App.jsx";
+@source "./index.jsx";
+@source "./components/**/*.jsx";
+@source "./pages/**/*.jsx";
+@source "./layouts/**/*.jsx";
+@source "./routes/**/*.jsx";
+
+@theme {
+  /* Colors - Primary Indigo System */
+  --color-primary: var(--primary-btn, #4F46E5);
+  --color-primary-dark: var(--primary-btn-hover, #3730A3);
+  --color-primary-light: var(--sai-active-tab-bg, rgba(99, 102, 241, 0.18));
+  --color-primary-mid: var(--sai-active-tab-color, #C7D2FE);
+
+  /* Colors - Indigo Palette overridden dynamically for standard utility classes */
+  --color-indigo-50: rgba(var(--primary-btn-rgb, 79, 70, 229), 0.05);
+  --color-indigo-100: rgba(var(--primary-btn-rgb, 79, 70, 229), 0.1);
+  --color-indigo-200: rgba(var(--primary-btn-rgb, 79, 70, 229), 0.2);
+  --color-indigo-300: rgba(var(--primary-btn-rgb, 79, 70, 229), 0.3);
+  --color-indigo-400: rgba(var(--primary-btn-rgb, 79, 70, 229), 0.4);
+  --color-indigo-500: var(--primary-btn, #6366f1);
+  --color-indigo-600: var(--primary-btn, #4f46e5);
+  --color-indigo-700: var(--primary-btn-hover, #4338ca);
+  --color-indigo-800: var(--primary-btn-hover, #3730a3);
+  --color-indigo-900: var(--primary-btn-hover, #312e81);
+  --color-indigo-950: var(--primary-btn-hover, #1e1b4b);
+
+  /* Colors - Blue and Purple aliases for autotheming */
+  --color-blue-500: var(--primary-btn, #3B82F6);
+  --color-blue-600: var(--primary-btn, #2563EB);
+  --color-blue-700: var(--primary-btn-hover, #1D4ED8);
+  --color-purple-500: var(--primary-btn, #A855F7);
+  --color-purple-600: var(--primary-btn, #9333EA);
+  --color-purple-700: var(--primary-btn-hover, #7E22CE);
+
+  /* Colors - Neutrals overridden for full theming capability */
+  --color-white: var(--card-bg, #FFFFFF);
+  --color-slate-50: var(--page-bg, #F8FAFC);
+  --color-slate-100: var(--table-header, #F1F5F9);
+  --color-slate-200: var(--border-color, #E2E8F0);
+  --color-slate-300: var(--border-color, #CBD5E1);
+  
+  --color-slate-400: var(--text-tertiary, #94A3B8);
+  --color-slate-500: var(--text-tertiary, #64748B);
+  --color-slate-600: var(--text-secondary, #475569);
+  --color-slate-700: var(--text-secondary, #334155);
+  --color-slate-800: var(--card-text, #1E293B);
+  --color-slate-900: var(--page-text, #0F172A);
+
+  --color-slate-450: var(--text-tertiary, #526379);
+  --color-slate-550: var(--text-secondary, #3D4C5E);
+  --color-slate-455: var(--text-tertiary, #526379);
+  --color-slate-555: var(--text-secondary, #3D4C5E);
+  --color-slate-55: var(--table-header, #F1F5F9);
+  --color-slate-650: var(--text-secondary, #334155);
+
+  /* Colors - Semantic / Status */
+  --color-success: var(--success, #059669);
+  --color-success-light: rgba(5, 150, 105, 0.12);
+  --color-warning: var(--warning, #D97706);
+  --color-warning-light: rgba(217, 119, 6, 0.12);
+  --color-danger: var(--danger, #DC2626);
+  --color-danger-light: rgba(220, 38, 38, 0.12);
+  --color-info: #0284C7;
+  --color-info-light: #E0F2FE;
+  --color-neutral-badge: var(--text-secondary, #6B7280);
+  --color-neutral-badge-bg: var(--table-header-bg, #F3F4F6);
+
+  /* Text Mapping Colors */
+  --text-primary: var(--page-text, #0F172A);
+  --text-secondary: var(--text-secondary, #475569);
+  --text-tertiary: var(--text-tertiary, #64748B);
+  --text-inverse: #FFFFFF;
+  --text-link: var(--primary-btn, #4F46E5);
+  --text-navbar: var(--navbar-text, #475569);
+  --text-sidebar: var(--sidebar-text, #E0E7FF);
+  --text-sidebar-active: var(--sai-active-tab-color, #FFFFFF);
+
+  /* Backgrounds */
+  --bg-base: var(--page-bg, #F8FAFC);
+  --bg-surface: var(--card-bg, #FFFFFF);
+  --bg-subtle: var(--table-header-bg, #F1F5F9);
+  --bg-overlay: rgba(15,23,42,0.5);
+  --bg-sidebar: var(--sidebar-bg, #1E1B4B);
+  --bg-sidebar-active: var(--secondary-btn, #4F46E5);
+  --bg-sidebar-hover: var(--sai-sidebar-hover, #2D2A72);
+  --bg-navbar: var(--navbar-bg, #FFFFFF);
+
+  /* Typography */
+  --font-display: var(--sai-font-family, 'Inter', 'Inter Fallback', sans-serif);
+  --font-body: var(--sai-font-family, 'Inter', 'Inter Fallback', sans-serif);
+  --font-sans: var(--sai-font-family, 'Inter', 'Inter Fallback', sans-serif);
+
+  /* Type Scale */
+  --text-display: 1.75rem;
+  --text-h1: 1.375rem;
+  --text-h2: 1.125rem;
+  --text-h3: 1rem;
+  --text-body-lg: 0.9375rem;
+  --text-body: 0.875rem;
+  --text-sm: 0.8125rem;
+  --text-label: 0.8125rem;
+  --text-micro: 0.6875rem;
+  --text-overline: 0.6875rem;
+
+  /* Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 0.0625rem 0.1875rem rgba(15,23,42,0.06);
+  --shadow-md: 0 0.25rem 0.75rem rgba(15,23,42,0.08);
+  --shadow-lg: 0 0.5rem 1.5rem rgba(15,23,42,0.1);
+  --shadow-primary: 0 0.25rem 0.75rem rgba(79,70,229,0.25);
+
+  /* Animations */
+  --animate-scale-up: scale-up 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-fade-in: fade-in 0.15s ease-out forwards;
+  --animate-slide-in: slide-in 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+:root {
+  /* Dynamic CSS theme custom properties initialized with defaults */
+  --primary-btn-rgb: 79, 70, 229;
+  --icon-color: var(--sai-icon-color, #4F46E5);
+  --pagination-bg: var(--sai-pagination-bg, #4F46E5);
+  --pagination-font: var(--sai-pagination-font, #FFFFFF);
+  --sidebar-bg: var(--sai-sidebar-bg, #1E1B4B);
+  --sidebar-text: var(--sai-sidebar-font, #E0E7FF);
+  --navbar-bg: var(--sai-navbar-bg, #FFFFFF);
+  --navbar-text: var(--sai-navbar-font, #475569);
+  --page-bg: var(--sai-main-bg, #F8FAFC);
+  --page-text: var(--sai-main-font, #0F172A);
+  --card-bg: var(--sai-card-bg, #FFFFFF);
+  --card-text: var(--sai-card-text, #0F172A);
+  --input-bg: var(--sai-input-bg, #FFFFFF);
+  --input-text: var(--sai-input-text, #0F172A);
+  --primary-btn: var(--sai-cta-bg, #4F46E5);
+  --primary-btn-hover: var(--sai-cta-hover-bg, #3730A3);
+  --secondary-btn: var(--sai-active-tab-bg, #6366F1);
+  --table-header-bg: var(--sai-table-header-bg, #F8FAFC);
+  --table-header-text: var(--sai-table-header-text, #475569);
+  --border-color: var(--sai-border-color, #E2E8F0);
+  --success-color: #059669;
+  --warning-color: #D97706;
+  --danger-color: #DC2626;
+  --text-secondary: var(--sai-text-secondary, #475569);
+  --text-tertiary: var(--sai-text-tertiary, #94A3B8);
+  --table-header: var(--sai-table-header, #F1F5F9);
+
+  /* Layout Backgrounds & Texts for compatibility with existing components */
+  --bg-sidebar: var(--sidebar-bg);
+  --text-sidebar: var(--sidebar-text);
+  --bg-sidebar-active: var(--secondary-btn);
+  --text-sidebar-active: var(--sai-active-tab-color, #FFFFFF);
+  --bg-sidebar-hover: var(--sai-sidebar-hover, #2D2A72);
+  --bg-navbar: var(--navbar-bg);
+  --text-navbar: var(--navbar-text);
+  --bg-base: var(--page-bg);
+  --bg-surface: var(--card-bg);
+  --bg-subtle: var(--table-header-bg);
+  --text-primary: var(--page-text);
+  --text-link: var(--primary-btn);
+
+  /* Additional CSS Spacing Variables */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 0.75rem;
+  --space-lg: 1rem;
+  --space-xl: 1.5rem;
+  --space-2xl: 2rem;
+  --space-3xl: 3rem;
+  --space-4xl: 4rem;
+}
+
+@keyframes scale-up {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateY(1rem);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ===================== SMOOTH THEME TRANSITIONS ===================== */
+/* Makes theme switching feel premium — smooth color animation */
+*:not([class*="sidebar"]):not(aside):not(nav) {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+/* Prevent sidebar transition glitches during theme switch */
+aside, aside *, [class*="sidebar"] {
+  transition: transform 0.3s ease !important;
+}
+
+/* ================================================================
+   GLOBAL THEME-AWARE OVERRIDES
+   Forces ALL hardcoded hex colors to respect CSS theme variables.
+   This ensures that every component changes when the theme changes.
+   ================================================================ */
+
+/* ===================== NEUTRAL BACKGROUND OVERRIDES ===================== */
+
+/* bg-white → card background */
+.bg-white {
+  background-color: var(--card-bg, #FFFFFF) !important;
+}
+
+/* focus:bg-white → focused input background */
+.focus\:bg-white:focus {
+  background-color: var(--card-bg, #FFFFFF) !important;
+}
+
+/* focus-within:bg-white */
+.focus-within\:bg-white:focus-within {
+  background-color: var(--card-bg, #FFFFFF) !important;
+}
+
+/* hover:bg-white */
+.hover\:bg-white:hover {
+  background-color: var(--card-bg, #FFFFFF) !important;
+}
+
+/* bg-slate-50 → page background */
+.bg-slate-50 {
+  background-color: var(--page-bg, #F8FAFC) !important;
+}
+
+/* bg-[#F8FAFC] / bg-slate-50 → page background */
+.bg-\[\#F8FAFC\], .bg-\[\#f8fafc\] {
+  background-color: var(--page-bg, #F8FAFC) !important;
+}
+
+/* bg-[#F1F5F9] / bg-slate-100 → subtle/table header */
+.bg-\[\#F1F5F9\], .bg-\[\#f1f5f9\] {
+  background-color: var(--table-header-bg, #F1F5F9) !important;
+}
+
+/* bg-slate-100 */
+.bg-slate-100 {
+  background-color: var(--table-header-bg, #F1F5F9) !important;
+}
+
+/* bg-slate-200 */
+.bg-slate-200 {
+  background-color: var(--table-header-bg, #E2E8F0) !important;
+}
+
+/* bg-gray-50 */
+.bg-gray-50 {
+  background-color: var(--page-bg, #F8FAFC) !important;
+}
+
+/* bg-gray-100 */
+.bg-gray-100 {
+  background-color: var(--table-header-bg, #F1F5F9) !important;
+}
+
+/* hover:bg-[#F8FAFC] → hover page bg */
+.hover\:bg-\[\#F8FAFC\]:hover, .hover\:bg-\[\#f8fafc\]:hover {
+  background-color: var(--page-bg, #F8FAFC) !important;
+}
+
+/* hover:bg-[#F1F5F9] → hover subtle bg */
+.hover\:bg-\[\#F1F5F9\]:hover, .hover\:bg-\[\#f1f5f9\]:hover {
+  background-color: var(--table-header-bg, #F1F5F9) !important;
+}
+
+/* hover:bg-slate-50 */
+.hover\:bg-slate-50:hover {
+  background-color: var(--page-bg, #F8FAFC) !important;
+}
+
+/* hover:bg-slate-100 */
+.hover\:bg-slate-100:hover {
+  background-color: var(--table-header-bg, #F1F5F9) !important;
+}
+
+/* hover:bg-gray-50 */
+.hover\:bg-gray-50:hover {
+  background-color: var(--page-bg, #F8FAFC) !important;
+}
+
+
+/* ===================== TEXT COLOR OVERRIDES ===================== */
+
+/* text-[#0F172A] / text-slate-900 → primary text */
+.text-\[\#0F172A\], .text-\[\#0f172a\] {
+  color: var(--page-text, #0F172A) !important;
+}
+
+/* text-[#1E293B] / text-slate-800 → card text */
+.text-\[\#1E293B\], .text-\[\#1e293b\] {
+  color: var(--card-text, #1E293B) !important;
+}
+
+/* text-[#334155] / text-slate-700 → secondary text */
+.text-\[\#334155\], .text-\[\#334155\] {
+  color: var(--text-secondary, #334155) !important;
+}
+
+/* text-[#475569] / text-slate-600 → secondary text */
+.text-\[\#475569\], .text-\[\#475569\] {
+  color: var(--text-secondary, #475569) !important;
+}
+
+/* text-[#64748B] / text-slate-500 → tertiary text */
+.text-\[\#64748B\], .text-\[\#64748b\] {
+  color: var(--text-tertiary, #64748B) !important;
+}
+
+/* text-[#94A3B8] / text-slate-400 → faint text */
+.text-\[\#94A3B8\], .text-\[\#94a3b8\] {
+  color: var(--text-tertiary, #94A3B8) !important;
+}
+
+/* text-slate-900 */
+.text-slate-900 {
+  color: var(--page-text, #0F172A) !important;
+}
+
+/* text-slate-800 */
+.text-slate-800 {
+  color: var(--card-text, #1E293B) !important;
+}
+
+/* text-slate-700 */
+.text-slate-700 {
+  color: var(--text-secondary, #334155) !important;
+}
+
+/* text-slate-600 */
+.text-slate-600 {
+  color: var(--text-secondary, #475569) !important;
+}
+
+/* text-slate-500 */
+.text-slate-500 {
+  color: var(--text-tertiary, #64748B) !important;
+}
+
+/* text-slate-400 */
+.text-slate-400 {
+  color: var(--text-tertiary, #94A3B8) !important;
+}
+
+/* text-gray-400 */
+.text-gray-400 {
+  color: var(--text-tertiary, #94A3B8) !important;
+}
+
+/* text-gray-500 */
+.text-gray-500 {
+  color: var(--text-tertiary, #64748B) !important;
+}
+
+/* ===================== BORDER COLOR OVERRIDES ===================== */
+
+/* border-[#F1F5F9] → subtle border */
+.border-\[\#F1F5F9\], .border-\[\#f1f5f9\] {
+  border-color: var(--border-color, #F1F5F9) !important;
+}
+
+/* border-[#E2E8F0] → standard border */
+.border-\[\#E2E8F0\], .border-\[\#e2e8f0\] {
+  border-color: var(--border-color, #E2E8F0) !important;
+}
+
+/* border-slate-200 */
+.border-slate-200 {
+  border-color: var(--border-color, #E2E8F0) !important;
+}
+
+/* border-slate-100 */
+.border-slate-100 {
+  border-color: var(--border-color, #F1F5F9) !important;
+}
+
+/* border-slate-300 */
+.border-slate-300 {
+  border-color: var(--border-color, #CBD5E1) !important;
+}
+
+/* border-[#CBD5E1] */
+.border-\[\#CBD5E1\], .border-\[\#cbd5e1\] {
+  border-color: var(--border-color, #CBD5E1) !important;
+}
+
+/* hover:border-slate-300 */
+.hover\:border-slate-300:hover {
+  border-color: var(--border-color, #CBD5E1) !important;
+}
+
+/* divide colors */
+.divide-slate-200 > :not(:last-child) {
+  border-color: var(--border-color, #E2E8F0) !important;
+}
+.divide-slate-100 > :not(:last-child) {
+  border-color: var(--border-color, #F1F5F9) !important;
+}
+
+/* ring colors */
+.ring-slate-200 {
+  --tw-ring-color: var(--border-color, #E2E8F0) !important;
+}
+
+/* focus-within:border-indigo-500 → theme primary */
+.focus-within\:border-indigo-500:focus-within {
+  border-color: var(--primary-btn, #4F46E5) !important;
+}
+
+/* focus-within:ring-indigo-500 → theme primary */
+.focus-within\:ring-indigo-500\/10:focus-within {
+  --tw-ring-color: rgba(var(--primary-btn-rgb, 79, 70, 229), 0.1) !important;
+}
+
+/* ===================== PRIMARY COLOR OVERRIDES ===================== */
+
+/* 1. Backgrounds */
+[class*="bg-[#4F46E5]"], [class*="bg-[#4f46e5]"] {
+  background-color: var(--primary-btn) !important;
+}
+button[class*="bg-[#4F46E5]"][class*="text-white"], button[class*="bg-[#4f46e5]"][class*="text-white"] {
+  background-color: var(--pagination-bg) !important;
+  color: var(--pagination-font) !important;
+}
+[class*="hover:bg-[#3730A3]"]:hover, [class*="hover:bg-[#3730a3]"]:hover,
+[class*="hover:bg-[#4F46E5]"]:hover, [class*="hover:bg-[#4f46e5]"]:hover {
+  background-color: var(--primary-btn-hover) !important;
+}
+[class*="bg-[#4F46E5]/5"] {
+  background-color: rgba(var(--primary-btn-rgb, 79, 70, 229), 0.05) !important;
+}
+[class*="bg-[#4F46E5]/10"] {
+  background-color: rgba(var(--primary-btn-rgb, 79, 70, 229), 0.1) !important;
+}
+[class*="bg-[#4F46E5]/20"] {
+  background-color: rgba(var(--primary-btn-rgb, 79, 70, 229), 0.2) !important;
+}
+[class*="bg-[#EEF2FF]"], [class*="bg-[#eef2ff]"] {
+  background-color: rgba(var(--primary-btn-rgb, 79, 70, 229), 0.08) !important;
+}
+[class*="hover:bg-[#EEF2FF]"]:hover, [class*="hover:bg-[#eef2ff]"]:hover {
+  background-color: rgba(var(--primary-btn-rgb, 79, 70, 229), 0.12) !important;
+}
+
+/* 2. Text & Icon Colors */
+[class*="text-[#4F46E5]"], [class*="text-[#4f46e5]"] {
+  color: var(--primary-btn) !important;
+}
+svg[class*="text-[#4F46E5]"], svg[class*="text-[#4f46e5]"] {
+  color: var(--icon-color) !important;
+}
+[class*="hover:text-[#3730A3]"]:hover, [class*="hover:text-[#3730a3]"]:hover,
+[class*="hover:text-[#4F46E5]"]:hover, [class*="hover:text-[#4f46e5]"]:hover {
+  color: var(--primary-btn-hover) !important;
+}
+
+/* 3. Border Colors */
+[class*="border-[#4F46E5]"], [class*="border-[#4f46e5]"] {
+  border-color: var(--primary-btn) !important;
+}
+[class*="border-[#C7D2FE]"], [class*="border-[#c7d2fe]"] {
+  border-color: rgba(var(--primary-btn-rgb, 79, 70, 229), 0.25) !important;
+}
+[class*="hover:border-[#3730A3]"]:hover, [class*="hover:border-[#3730a3]"]:hover,
+[class*="hover:border-[#4F46E5]"]:hover, [class*="hover:border-[#4f46e5]"]:hover {
+  border-color: var(--primary-btn-hover) !important;
+}
+
+/* 4. Focus states & Interactive Elements */
+[class*="focus:border-[#4F46E5]"]:focus, [class*="focus:border-[#4f46e5]"]:focus {
+  border-color: var(--primary-btn) !important;
+}
+[class*="focus:ring-[#4F46E5]"]:focus, [class*="focus:ring-[#4f46e5]"]:focus {
+  --tw-ring-color: var(--primary-btn) !important;
+}
+[class*="focus:ring-[#4F46E5]/12"]:focus, [class*="focus:ring-[#4f46e5]/12"]:focus {
+  --tw-ring-color: rgba(var(--primary-btn-rgb, 79, 70, 229), 0.12) !important;
+}
+
+/* 5. Accent Controls */
+[class*="accent-[#4F46E5]"], [class*="accent-[#4f46e5]"] {
+  accent-color: var(--primary-btn) !important;
+}
+
+/* ===================== FORM FIELD OVERRIDES ===================== */
+
+/* Input/textarea backgrounds */
+input, textarea, select {
+  background-color: var(--input-bg, var(--card-bg, #FFFFFF)) !important;
+  color: var(--input-text, var(--page-text, #0F172A)) !important;
+  border-color: var(--border-color, #E2E8F0) !important;
+}
+
+/* Form field placeholder contrast */
+::placeholder {
+  color: var(--text-tertiary, #94A3B8) !important;
+  opacity: 0.8 !important;
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--text-tertiary, #94A3B8) !important;
+  opacity: 0.8 !important;
+}
+
+/* ===================== THEMED CARD CLASS ===================== */
+
+.themed-card {
+  background-color: var(--card-bg);
+  color: var(--card-text);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.themed-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+  border-color: rgba(var(--primary-btn-rgb), 0.3);
+}
+
+/* ===================== MOBILE PERFORMANCE ===================== */
+
+/* Disable transitions and complex shadows on mobile to improve Speed Index */
+@media (max-width: 767px) {
+  * {
+    animation-delay: 0s !important;
+    animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0s !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .animate-pulse {
+    animation: none !important;
+    opacity: 0.7 !important;
+  }
+  
+  .shadow-sm, .shadow-md, .shadow-lg, .shadow-xl, .shadow-2xl, .shadow-primary {
+    box-shadow: none !important;
+    border: 1px solid var(--border-color, rgba(15, 23, 42, 0.08)) !important;
+  }
+
+  .backdrop-blur-sm, .backdrop-blur-md, .backdrop-blur-lg, .backdrop-blur {
+    backdrop-filter: none !important;
+    background-color: var(--card-bg, #FFFFFF) !important;
+  }
+}
+
+/* Custom scrollbar styling for a modern, premium look */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+.no-scrollbar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+/* ===================== PROGRESS BAR COLOR OVERRIDES ===================== */
+/* Force all inline progress bar fills to use theme primary */
+.bg-indigo-500, .bg-indigo-600 {
+  background-color: var(--primary-btn, #4F46E5) !important;
+}
+.bg-indigo-700, .bg-indigo-800 {
+  background-color: var(--btn-hover, #3730A3) !important;
+}
+/* Keep semantic status colors (emerald = completed/success — intentional) */
+/* bg-emerald-500/600 are intentionally NOT overridden — they mean "Completed" */
+
+/* Themed active tab / nav indicator dots */
+.bg-indigo-500.animate-pulse {
+  background-color: var(--primary-btn, #4F46E5) !important;
+}
+
+/* Staff dashboard circular avatar initials */
+.bg-indigo-500.text-white.rounded-full,
+.bg-indigo-600.text-white.rounded-full {
+  background-color: var(--primary-btn, #4F46E5) !important;
+}
+
+/* Pagination active page */
+.bg-indigo-600.rounded-full,
+.bg-indigo-600.rounded-lg {
+  background-color: var(--pagination-bg, #4F46E5) !important;
+}
+
+/* Accessibility Focus Rings: Enforces high-contrast focus indicators for keyboard navigation */
+*:focus-visible {
+  outline: 3px solid var(--primary-btn, #4F46E5) !important;
+  outline-offset: 2px !important;
+}
+
+/* Prevent accessibility outline on chat composer textarea and search inputs */
+.chat-composer-textarea:focus-visible,
+.chat-composer-textarea:focus {
+  outline: none !important;
+  outline-offset: 0px !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.chat-search-input:focus-visible,
+.chat-search-input:focus {
+  outline: none !important;
+  outline-offset: 0px !important;
+}

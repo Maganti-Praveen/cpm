@@ -1,0 +1,59 @@
+# Dependency directories
+node_modules/
+frontend/node_modules/
+backend/node_modules/
+
+# Production build directories
+dist/
+frontend/dist/
+backend/dist/
+build/
+coverage/
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE / System files
+.vscode/
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Uploads
+backend/uploads/
+
+# Temporary files
+backend/test_prisma_keys.js
+backend/check_prisma.js
+backend/check_users.js
+backend/test_endpoints.js
+test_document.txt
+Credentials.txt
+
+# Seed files (contain sensitive defaults — keep local only)
+*seed*
+*.seed.*
+seed*.js
+seed*.mjs
+seed*.ts
+backend/prisma/seed*
+backend/prisma/seed-cms.mjs
+backend/prisma/clearDb.js
+backend/prisma/updateImages.js
+
+# Consolidated Project Documentation
+document.md
+redis.md
+info.md
+info.m
+documents/
+
+

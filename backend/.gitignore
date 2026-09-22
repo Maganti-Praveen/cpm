@@ -1,0 +1,16 @@
+node_modules/
+.env
+dist/
+build/
+coverage/
+/src/generated/prisma
+
+# Seed files
+*seed*
+*.seed.*
+seed*.js
+seed*.mjs
+seed*.ts
+prisma/seed*
+prisma/clearDb.js
+prisma/updateImages.js

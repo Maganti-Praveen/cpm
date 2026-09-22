@@ -1,0 +1,563 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                Int                @id @default(autoincrement())
+  fullName          String
+  email             String             @unique
+  password          String
+  role              UserRole           @default(CLIENT)
+  isActive          Boolean            @default(true)
+  company           String?
+  phone             String?
+  avatar            String?
+  status            String             @default("Active")
+  isFirstLogin      Boolean            @default(true)
+  twoFactorEnabled  Boolean            @default(false)
+  isSuperAdmin      Boolean            @default(false)
+  lastLogin         DateTime?
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  themeId           String?
+  adminRole         String?
+  permissions       Json?
+  suspendedAt       DateTime?
+  suspensionReason  String?
+  unsuspendedAt     DateTime?
+  auditLogs         AuditLog[]         @relation("UserAuditLogs")
+  comments          Comment[]          @relation("UserComments")
+  uploadedDocs      Document[]         @relation("DocUploader")
+  invoices          Invoice[]          @relation("ClientInvoices")
+  sentMessages      Message[]          @relation("SentMessages")
+  notifications     Notification[]
+  clientProjects    Project[]          @relation("ClientProjects")
+  pushSubscriptions PushSubscription[]
+  tasks             Task[]             @relation("TaskAssignee")
+  tickets           Ticket[]           @relation("ClientTickets")
+  replies           TicketReply[]      @relation("ReplyUser")
+  transactions      Transaction[]      @relation("ClientTransactions")
+  theme             Theme?             @relation("UserTheme", fields: [themeId], references: [id])
+  teamProjects      Project[]          @relation("ProjectTeam")
+  conversations     Conversation[]     @relation("UserConversations")
+  chatLocks         ConversationLock[]
+}
+
+model Project {
+  id               Int           @id @default(autoincrement())
+  name             String
+  description      String?
+  clientId         Int?
+  progress         Int           @default(0)
+  status           String        @default("Planning")
+  startDate        DateTime?
+  dueDate          DateTime?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  activities       Activity[]
+  deliverableItems Deliverable[]
+  documents        Document[]
+  invoices         Invoice[]
+  milestones       Milestone[]
+  client           User?         @relation("ClientProjects", fields: [clientId], references: [id], onDelete: SetNull)
+  tasks            Task[]
+  team             User[]        @relation("ProjectTeam")
+}
+
+model Deliverable {
+  id        Int       @id @default(autoincrement())
+  name      String
+  size      String
+  status    String    @default("Awaiting Review")
+  stage     String?
+  dueDate   DateTime?
+  url       String?
+  projectId Int
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  project   Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model Task {
+  id          Int          @id @default(autoincrement())
+  taskKey     String       @unique
+  title       String
+  description String?
+  projectId   Int
+  assigneeId  Int?
+  priority    String       @default("Medium")
+  status      String       @default("To Do")
+  dueDate     DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  attachments Attachment[]
+  comments    Comment[]
+  assignee    User?        @relation("TaskAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
+  project     Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model Attachment {
+  id        Int      @id @default(autoincrement())
+  name      String
+  size      String
+  url       String?
+  taskId    Int
+  createdAt DateTime @default(now())
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  text      String
+  taskId    Int
+  userId    Int
+  createdAt DateTime @default(now())
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  user      User     @relation("UserComments", fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Milestone {
+  id        Int       @id @default(autoincrement())
+  title     String
+  date      DateTime?
+  status    String    @default("Planning")
+  progress  Int       @default(0)
+  projectId Int
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  project   Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model Document {
+  id           Int      @id @default(autoincrement())
+  title        String
+  description  String?
+  type         String
+  fileUrl      String?
+  linkUrl      String?
+  projectId    Int
+  uploadedById Int
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  project      Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  uploadedBy   User     @relation("DocUploader", fields: [uploadedById], references: [id], onDelete: Cascade)
+}
+
+model Activity {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  type        String   @default("info")
+  projectId   Int
+  createdAt   DateTime @default(now())
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model Ticket {
+  id          Int           @id @default(autoincrement())
+  subject     String
+  category    String        @default("General")
+  priority    String        @default("Medium")
+  status      String        @default("Open")
+  description String
+  attachment  String?
+  clientId    Int
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  client      User          @relation("ClientTickets", fields: [clientId], references: [id], onDelete: Cascade)
+  replies     TicketReply[]
+}
+
+model TicketReply {
+  id        Int      @id @default(autoincrement())
+  message   String
+  userId    Int
+  ticketId  Int
+  createdAt DateTime @default(now())
+  ticket    Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  user      User     @relation("ReplyUser", fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ContactSubmission {
+  id                  Int            @id @default(autoincrement())
+  firstName           String
+  lastName            String
+  email               String
+  subject             String
+  message             String
+  status              String         @default("Pending")
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+  isSuspensionInquiry Boolean        @default(false)
+  replies             ContactReply[]
+}
+
+model ContactReply {
+  id                  Int               @id @default(autoincrement())
+  contactSubmissionId Int
+  senderId            Int?
+  senderName          String            @default("Admin")
+  subject             String
+  message             String
+  status              String            @default("sent")
+  createdAt           DateTime          @default(now())
+  contactSubmission   ContactSubmission @relation(fields: [contactSubmissionId], references: [id], onDelete: Cascade)
+}
+
+model Invoice {
+  id            Int           @id @default(autoincrement())
+  invoiceNumber String        @unique
+  amount        Float
+  status        String        @default("Unpaid")
+  issueDate     DateTime      @default(now())
+  dueDate       DateTime
+  projectId     Int?
+  clientId      Int
+  description   String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  paymentMethod String?
+  paymentProof  String?
+  paymentStatus String?       @default("UNPAID")
+  paidAt        DateTime?
+  transactionId String?
+  gatewayName   String?
+  client        User          @relation("ClientInvoices", fields: [clientId], references: [id], onDelete: Cascade)
+  project       Project?      @relation(fields: [projectId], references: [id])
+  transactions  Transaction[]
+}
+
+model SiteSettings {
+  id                  Int      @id @default(autoincrement())
+  singletonId         Int      @unique @default(1)
+  siteTitle           String   @default("Sai CRP")
+  metaTitle           String   @default("Sai IT Services - Project Management Portal")
+  metaDescription     String   @default("Sai IT Services Client Relationship Portal")
+  logoUrl             String?
+  faviconUrl          String?
+  themeColor          String   @default("#4F46E5")
+  themeSecondaryColor String   @default("#6366F1")
+  cloudinaryCloudName String?
+  cloudinaryApiKey    String?
+  cloudinaryApiSecret String?
+  storageProvider     String   @default("local")
+  s3Bucket            String?
+  s3Region            String?
+  s3AccessKeyId       String?
+  s3SecretAccessKey   String?
+  s3Endpoint          String?
+  sidebarBg           String   @default("#1E1B4B")
+  sidebarFontColor    String   @default("#E0E7FF")
+  navbarBg            String   @default("#FFFFFF")
+  navbarFontColor     String   @default("#475569")
+  mainBg              String   @default("#F8FAFC")
+  mainFontColor       String   @default("#0F172A")
+  activeTabBg         String   @default("#4F46E5")
+  activeTabColor      String   @default("#FFFFFF")
+  ctaBg               String   @default("#4F46E5")
+  ctaHoverBg          String   @default("#3730A3")
+  fontFamily          String   @default("Inter")
+  updatedAt           DateTime @updatedAt
+  defaultThemeId      String?
+}
+
+model PaymentGateway {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  label     String
+  type      String   @default("automatic")
+  enabled   Boolean  @default(false)
+  mode      String   @default("test")
+  config    Json     @default("{}")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model EmailSettings {
+  id                  Int      @id @default(autoincrement())
+  singletonId         Int      @unique @default(1)
+  emailEnabled        Boolean  @default(false)
+  activeProvider      String   @default("smtp")
+  smtpHost            String   @default("")
+  smtpPort            Int      @default(587)
+  smtpUser            String   @default("")
+  smtpPass            String   @default("")
+  smtpFromEmail       String   @default("")
+  smtpFromName        String   @default("")
+  smtpSecure          Boolean  @default(false)
+  resendApiKey        String   @default("")
+  resendFromEmail     String   @default("")
+  resendFromName      String   @default("")
+  autoEmailsEnabled   Boolean  @default(true)
+  invoiceEmails       Boolean  @default(true)
+  clientWelcomeEmails Boolean  @default(true)
+  staffWelcomeEmails  Boolean  @default(true)
+  projectAssignEmails Boolean  @default(true)
+  passwordResetEmails Boolean  @default(true)
+  supportTicketEmails Boolean  @default(true)
+  emailPrimaryColor   String   @default("#4F46E5")
+  emailHeaderBg       String   @default("#1E1B4B")
+  emailBodyBg         String   @default("#FFFFFF")
+  emailBgColor        String   @default("#F8FAFC")
+  emailFontColor      String   @default("#334155")
+  emailFontFamily     String   @default("Segoe UI, Arial, sans-serif")
+  emailFooterText     String   @default("© 2026 {{companyName}}. All rights reserved.")
+  updatedAt           DateTime @updatedAt
+  brevoApiKey         String   @default("")
+  brevoFromEmail      String   @default("")
+  brevoFromName       String   @default("")
+}
+
+model EmailTemplate {
+  id          Int      @id @default(autoincrement())
+  name        String
+  slug        String   @unique
+  subject     String
+  htmlContent String
+  variables   String[]
+  type        String
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model SecuritySettings {
+  id               Int      @id @default(autoincrement())
+  singletonId      Int      @unique @default(1)
+  admin2FAEnabled  Boolean  @default(false)
+  staff2FAEnabled  Boolean  @default(false)
+  client2FAEnabled Boolean  @default(false)
+  updatedAt        DateTime @updatedAt
+}
+
+model EmailLog {
+  id        Int      @id @default(autoincrement())
+  timestamp DateTime @default(now())
+  recipient String
+  template  String
+  subject   String
+  status    String
+  error     String?
+}
+
+model Transaction {
+  id            Int      @id @default(autoincrement())
+  transactionId String   @unique
+  invoiceId     Int
+  clientId      Int
+  amount        Float
+  paymentType   String
+  gatewayName   String
+  status        String
+  paymentProof  String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  client        User     @relation("ClientTransactions", fields: [clientId], references: [id], onDelete: Cascade)
+  invoice       Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  title     String
+  message   String
+  type      String
+  linkId    Int?
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Theme {
+  id              String   @id @default(cuid())
+  name            String
+  sidebarBg       String
+  sidebarFont     String
+  activeTabBg     String
+  activeTabFont   String
+  navbarBg        String
+  navbarFont      String
+  mainCanvasBg    String
+  mainFontColor   String
+  primaryButtonBg String
+  buttonHoverBg   String
+  isDefault       Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  footerBg        String   @default("#1E1B4B")
+  footerFont      String   @default("#E0E7FF")
+  fontFamily      String   @default("Inter")
+  iconColor       String   @default("#4F46E5")
+  paginationBg    String   @default("#4F46E5")
+  paginationFont  String   @default("#FFFFFF")
+  users           User[]   @relation("UserTheme")
+}
+
+model AuditLog {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  action    String
+  entity    String
+  entityId  String?
+  details   Json?
+  createdAt DateTime @default(now())
+  user      User     @relation("UserAuditLogs", fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model PublicPageContent {
+  id        Int      @id @default(autoincrement())
+  page      String
+  section   String
+  key       String
+  value     String
+  updatedAt DateTime @updatedAt
+
+  @@unique([page, section, key])
+}
+
+model CmsService {
+  id               Int      @id @default(autoincrement())
+  slug             String   @unique
+  title            String
+  subtitle         String?
+  icon             String
+  image            String?
+  shortDescription String
+  fullDescription  String
+  keyCapabilities  String[]
+  benefits         String[]
+  techStack        String[]
+  isActive         Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model CmsCareer {
+  id               Int      @id @default(autoincrement())
+  title            String
+  department       String
+  location         String
+  type             String
+  experience       String
+  description      String
+  responsibilities String[]
+  requirements     String[]
+  contactEmail     String   @default("careers@saiitservices.com")
+  active           Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model CmsAboutUs {
+  id         Int      @id @default(1)
+  title      String
+  subtitle   String
+  mission    String
+  vision     String
+  coreValues Json     // Array of { title, description, icon }
+  milestones Json     // Array of { year, title, description }
+  stats      Json     // Array of { label, value }
+  updatedAt  DateTime @updatedAt
+}
+
+model CmsCaseStudy {
+  id               Int      @id @default(autoincrement())
+  slug             String   @unique
+  title            String
+  subtitle         String?
+  clientName       String?
+  industry         String?
+  icon             String   @default("Briefcase")
+  image            String?
+  shortDescription String
+  fullDescription  String
+  keyResults       String[]
+  technologiesUsed String[]
+  isActive         Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+
+model VerificationSession {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  code      String
+  type      String
+  expiresAt DateTime
+  attempts  Int      @default(0)
+  verified  Boolean  @default(false)
+  userId    Int?
+  createdAt DateTime @default(now())
+}
+
+model Conversation {
+  id              Int       @id @default(autoincrement())
+  type            String    @default("DM")
+  name            String?
+  avatarUrl       String?
+  creatorId       Int?
+  adminIds        Int[]     @default([])
+  archivedByIds   Int[]     @default([])
+  pinnedByIds     Int[]     @default([])
+  pinnedMessageId Int?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  messages        Message[]
+  participants    User[]    @relation("UserConversations")
+  locks           ConversationLock[]
+}
+
+model Message {
+  id             Int          @id @default(autoincrement())
+  conversationId Int
+  senderId       Int
+  content        String
+  isRead         Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+  deletedFor     Int[]        @default([])
+  reactions      Json?        @default("[]")
+  isSystem       Boolean      @default(false)
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender         User         @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+}
+
+model PushSubscription {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  endpoint   String   @unique
+  keysP256dh String
+  keysAuth   String
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum UserRole {
+  ADMIN
+  STAFF
+  CLIENT
+}
+
+model LoginAttempt {
+  id        Int      @id @default(autoincrement())
+  email     String
+  ipAddress String
+  status    String   // "SUCCESS" | "FAILED"
+  message   String?  // error message or details
+  timestamp DateTime @default(now())
+  isDeleted Boolean  @default(false)
+}
+
+model ConversationLock {
+  id             Int          @id @default(autoincrement())
+  conversationId Int          @unique
+  userId         Int
+  pin            String       // Hashed 4-digit PIN
+  createdAt      DateTime     @default(now())
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

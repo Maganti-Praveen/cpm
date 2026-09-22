@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms of Service | SAI IT SERVICES</title>
+  <meta name="description" content="Read the terms of service governing the use of the Sai Portal." />
+  <meta property="og:title" content="Terms of Service | SAI IT SERVICES" />
+  <meta property="og:description" content="Read the terms of service governing the use of the Sai Portal." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://res.cloudinary.com/dfr1lsqzx/image/upload/sai-crp/og/og-terms-of-service.png" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="icon" type="image/webp" href="/logo.webp" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+    :root {
+      color-scheme: light;
+      font-family: 'Inter', "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: #f8fafc;
+      color: #0f172a;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeSpeed;
+    }
+
+    .landing-prerender {
+      min-height: 100vh;
+      overflow-x: hidden;
+      box-sizing: border-box;
+      background: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .landing-prerender-hero {
+      box-sizing: border-box;
+      max-width: 55rem;
+      width: 100%;
+      margin: 0 auto;
+      padding: 60px 24px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .landing-prerender-header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 20px;
+      margin-bottom: 12px;
+    }
+
+    .landing-prerender-logo {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+      display: block;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      padding: 4px;
+      background: #ffffff;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .noscript-back-btn {
+      box-sizing: border-box;
+      min-height: 40px;
+      border-radius: 10px;
+      padding: 8px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(79, 70, 229, 0.22);
+      background: #fff;
+      color: #4f46e5;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .noscript-back-btn:hover {
+      background: #f5f3ff;
+      border-color: rgba(79, 70, 229, 0.45);
+      color: #4338ca;
+      transform: translateY(-1px);
+    }
+
+    .landing-prerender-title {
+      color: #020617;
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin: 0;
+    }
+
+    .landing-prerender-date {
+      color: #64748b;
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: -16px;
+    }
+
+    .landing-prerender-content {
+      color: #334155;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .landing-prerender-content p {
+      margin-bottom: 24px;
+      white-space: pre-line;
+    }
+
+    .policy-section {
+      margin-top: 36px;
+    }
+
+    .policy-section-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 12px;
+    }
+
+    .policy-box {
+      border: 1px solid rgba(79, 70, 229, 0.15);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 16px 0;
+    }
+    
+    .policy-box-primary {
+      background: rgba(245, 243, 255, 0.7);
+      border-color: rgba(79, 70, 229, 0.25);
+    }
+    
+    .policy-box-neutral {
+      background: rgba(248, 250, 252, 0.7);
+      border-color: #e2e8f0;
+    }
+
+    .policy-box-title {
+      font-weight: 700;
+      margin-bottom: 8px;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .policy-box-primary .policy-box-title {
+      color: #4f46e5;
+    }
+    
+    .policy-box-neutral .policy-box-title {
+      color: #0f172a;
+    }
+    
+    .policy-box-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      display: block;
+    }
+    
+    .policy-box-primary .policy-box-dot {
+      background: #4f46e5;
+    }
+    
+    .policy-box-neutral .policy-box-dot {
+      background: #64748b;
+    }
+
+    .policy-list {
+      padding-left: 20px;
+      margin: 8px 0;
+    }
+
+    .policy-list li {
+      margin-bottom: 8px;
+    }
+    
+    .policy-note {
+      font-size: 12px;
+      color: #4f46e5;
+      margin-top: 12px;
+      font-weight: 600;
+    }
+
+    .landing-prerender-footer {
+      box-sizing: border-box;
+      width: 100%;
+      max-width: 80rem;
+      margin: 0 auto;
+      padding: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(226, 232, 240, 0.8);
+      font-size: 13px;
+      font-weight: 500;
+      color: #64748b;
+    }
+
+    .noscript-footer-links {
+      display: flex;
+      gap: 16px;
+    }
+
+    .noscript-footer-link {
+      color: #64748b;
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .noscript-footer-link:hover {
+      color: #4f46e5;
+    }
+
+    @media (max-width: 640px) {
+      .landing-prerender-footer {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="landing-prerender">
+    <div class="landing-prerender-hero">
+      <div class="landing-prerender-header-bar">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <img class="landing-prerender-logo" src="/logo.webp" alt="Sai IT Services Logo" />
+          <span style="font-size: 20px; font-weight: 800; color: #0f172a; letter-spacing: 0.02em;">SAI IT SERVICES</span>
+        </div>
+        <a class="noscript-back-btn" href="/">
+          Back to Portal
+        </a>
+      </div>
+
+      <h1 class="landing-prerender-title">Terms of Service</h1>
+      <div class="landing-prerender-date">Last Updated: February 12, 2026</div>
+
+      <div class="landing-prerender-content">
+        <p>Welcome to the Project Management Portal. These Terms of Service ("Terms") govern your access to and use of the platform operated by SAI IT SERVICES LLC.
+
+By accessing or using the Platform, you agree to comply with and be bound by these Terms. If you do not agree with any part of these Terms, you must not access or use the Platform.</p>
+
+        <div class="policy-section">
+          <div class="policy-section-title">1. Definitions</div>
+          <div class="policy-box policy-box-neutral">
+            <div class="policy-box-title">
+              <span class="policy-box-dot"></span>
+              Standard Terminology
+            </div>
+            <p>The following terms are used in these Terms of Service:</p>
+            <ul class="policy-list">
+              <li>"Company", "We", "Us", or "Our" refers to SAI IT SERVICES LLC.</li>
+              <li>"Platform", "Portal", or "Website" refers to the Project Management Portal and its associated subdomains.</li>
+              <li>"User", "You", or "Your" refers to any individual accessing or using the Platform, including Administrators, Team Members, and Clients.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="policy-section">
+          <div class="policy-section-title">2. Cookies</div>
+          <div class="policy-box policy-box-neutral">
+            <div class="policy-box-title">
+              <span class="policy-box-dot"></span>
+              Cookie Agreement
+            </div>
+            <p>The Platform uses cookies to enhance user experience, support secure authentication sessions, and ensure proper portal functionality. By accessing the Platform, you agree to our use of required cookies.</p>
+            <div class="policy-note">Cookies are small text files stored on your device. Required cookies are essential for core Platform security and user authentication (such as keeping you logged in). You may manage optional cookies through your profile or browser settings.</div>
+          </div>
+        </div>
+
+        <div class="policy-section">
+          <div class="policy-section-title">3. License and Intellectual Property</div>
+          <div class="policy-box policy-box-primary">
+            <div class="policy-box-title">
+              <span class="policy-box-dot"></span>
+              Intellectual Property Policy
+            </div>
+            <p>Unless otherwise stated, SAI IT SERVICES LLC and/or its licensors own all intellectual property rights for the content, design, software, and systems available on the Platform. All rights are reserved.
+
+You are granted a limited, non-exclusive, non-transferable license to access and use the Platform for personal, collaborative, or business operations under your registered account role.
+
+You must not:</p>
+            <ul class="policy-list">
+              <li>Copy, modify, or republish Platform code or templates</li>
+              <li>Sell, rent, lease, or sub-license access credentials to the Platform</li>
+              <li>Exploit Platform resources or reverse-engineer its systems</li>
+              <li>Redistribute proprietary data or deliverables without authorization</li>
+            </ul>
+            <div class="policy-note">This Agreement becomes effective on the date you first access the Platform.</div>
+          </div>
+        </div>
+
+        <div class="policy-section">
+          <div class="policy-section-title">4. User Content and Comments</div>
+          <p>Users may post comments, replies, or task logs in dedicated sections of the Platform. You represent and warrant that your content does not violate any third-party intellectual property or privacy rights, and does not contain defamatory, offensive, or unlawful material.
+
+We reserve the right to monitor and remove any user-contributed content that is deemed inappropriate or in breach of these Terms.</p>
+        </div>
+
+        <div class="policy-section">
+          <div class="policy-section-title">5. Invoices and Financial Transactions</div>
+          <p>Billing and payment services are provided per project milestone. You agree to settle invoices by the specified due date using approved automatic payment gateways or by uploading manual proof of transfer. The Company reserves the right to suspend platform access for accounts with outstanding unpaid invoices.</p>
+        </div>
+
+        <div class="policy-section">
+          <div class="policy-section-title">6. Limitation of Liability</div>
+          <p>The Platform is provided on an "as is" and "as available" basis without warranties of any kind. In no event shall SAI IT SERVICES LLC be liable for any direct, indirect, incidental, special, or consequential damages arising out of your use or inability to use the Platform, even if advised of the possibility of such damages.</p>
+        </div>
+
+        <div class="policy-section">
+          <div class="policy-section-title">7. Governing Law</div>
+          <p>These Terms of Service shall be governed by and construed in accordance with the laws of the State of Missouri, United States, without regard to its conflict of law principles. Any legal actions or disputes arising from these Terms shall be resolved in courts located in Missouri.</p>
+        </div>
+      </div>
+    </div>
+
+    <footer class="landing-prerender-footer">
+      <span>&copy; 2026 Sai IT Services. All rights reserved.</span>
+      <div class="noscript-footer-links">
+        <a href="/privacy-policy.html" id="noscript-footer-link-privacy" class="noscript-footer-link">Privacy Policy</a>
+        <a href="/terms-of-service.html" id="noscript-footer-link-terms" class="noscript-footer-link">Terms of Service</a>
+        <a href="mailto:support@saiitservices.com" id="noscript-footer-link-support" class="noscript-footer-link">Support</a>
+      </div>
+    </footer>
+  </main>
+</body>
+</html>
